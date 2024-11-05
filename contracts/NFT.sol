@@ -154,18 +154,18 @@ contract NFT is ERC721, Ownable {
             )
         );
 
-        string memory image = Base64.encode(
-            bytes(
-                string(
-                    abi.encodePacked(
-                        '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" fill="none">'
-                        '<image href="',
-                        data.pfp,
-                        '" height="400" width="400" />'
-                        '<image href="',
-                        data.event_pfp,
-                        '" height="100" width="100" x="0" y="300" />'
-                        "</svg>"
+        bytes memory image = abi.encodePacked(
+            "data:image/svg+xml;base64,",
+            Base64.encode(bytes(
+                abi.encodePacked(
+                    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400" viewBox="0 0 400 400" fill="none">'
+                    '<image xlink:href="',
+                    data.event_pfp,
+                    '" height="400" width="400" />'
+                    '<image xlink:href="',
+                    data.pfp,
+                    '" height="100" width="100" x="0" y="300" />'
+                    "</svg>"
                     )
                 )
             )
@@ -177,7 +177,7 @@ contract NFT is ERC721, Ownable {
                     abi.encodePacked(
                         '{"description": "',
                         description,
-                        '", "image_data": data:image/svg+xml;base64,',
+                        '", "animation_url": "',
                         image,
                         '", "name": "',
                         name,

@@ -1,13 +1,4 @@
-# Sample Hardhat Project
+# Luma.Link NFT Contract
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+Base: 0x1060d1C75f914507C22290bEbeeb051EF8D5b3F6
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
