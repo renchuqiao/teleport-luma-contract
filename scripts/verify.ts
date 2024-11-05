@@ -15,7 +15,9 @@ async function main() {
 
     const nft = addresses.NFT;
     await verifyContract(nft, chainId);
-    
+
+    const admin = addresses.Admin;
+    await verifyContract(admin, chainId);
 
     console.log("");
     console.log("Verification is completed ...");
