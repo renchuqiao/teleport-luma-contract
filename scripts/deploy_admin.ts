@@ -24,14 +24,14 @@ async function main() {
     console.log("");
     console.log("Deploying from contracts...");
 
-    const NFT = await ethers.getContractFactory('NFT');
-    let nft = await (await NFT.deploy("TEST-Luma", "$TEE-LUMA",ownerAddress)).deployed();
+    const Admin = await ethers.getContractFactory('Admin');
+    let admin = await (await Admin.deploy(ownerAddress)).deployed();
 
-    await writeAddress('NFT', nft.address, ["TEST-Luma", "$TEE-LUMA", ownerAddress], chainId);
+    await writeAddress('Admin', admin.address, [ownerAddress], chainId);
 
   console.log("Deployment Completed!");
   console.log("");
-  console.log("NFT deployed at: " + nft.address);
+  console.log("Admin deployed at: " + admin.address);
 }
 
 let root: any = {};
