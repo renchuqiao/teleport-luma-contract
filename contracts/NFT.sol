@@ -71,7 +71,9 @@ contract NFT is ERC721, Ownable {
         string memory _name,
         string memory _symbol,
         address initialOwner
-    ) ERC721(_name, _symbol) Ownable(initialOwner) {}
+    ) ERC721(_name, _symbol) Ownable(initialOwner) {
+        isWhitelisted[initialOwner] = true;
+    }
 
     function whitelistMinter(address minter) public onlyOwner {
         isWhitelisted[minter] = true;
@@ -90,7 +92,7 @@ contract NFT is ERC721, Ownable {
         string memory name,
         string memory username,
         string memory pfp,
-        string memory event_pfp
+        string memory event_pfp,
         bytes32 nftIdHash
     ) public returns (uint256) {
         require(isWhitelisted[msg.sender], "Caller is not whitelisted");
@@ -124,12 +126,6 @@ contract NFT is ERC721, Ownable {
         return newTokenId;
     }
 
-    function getSvg(string memory event_id) private view returns (string memory) {
-        string memory svg;
-        svg = string.concat("", event_id);
-        return svg;
-    } 
-
     function tokenURI(
         uint256 tokenId
     ) public view override returns (string memory) {
@@ -158,16 +154,16 @@ contract NFT is ERC721, Ownable {
             )
         );
 
-        string memory image = abi.encodePacked(
+        bytes memory image = abi.encodePacked(
             "data:image/svg+xml;base64,",
             Base64.encode(bytes(
-                abi.encode(
+                abi.encodePacked(
                     '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" fill="none">'
                     '<image href="',
                     data.pfp,
                     '" height="400" width="400" />'
                     '<image href="',
-                    data.event_id,
+                    data.event_pfp,
                     '" height="100" width="100" x="0" y="300" />'
                     "</svg>"
                     )
@@ -182,8 +178,8 @@ contract NFT is ERC721, Ownable {
                         '{"description": "',
                         description,
                         '", "image": "',
-                        data.pfp,
-                        '", "name": "',
+                        image,
+                        unicode'", "name": "',
                         name,
                         '", "attributes": [{"trait_type": "X Username", "value": "',
                         data.username,

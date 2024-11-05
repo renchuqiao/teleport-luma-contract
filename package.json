@@ -1,11 +1,16 @@
 {
   "name": "hardhat-project",
+  "scripts": {
+    "deploy": "npx hardhat run scripts/deploy.ts",
+    "verify": "npx hardhat run scripts/verify.ts"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "hardhat": "^2.22.15"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.1.0",
+    "dotenv": "^16.4.5",
     "hardhat-deploy": "^0.14.0"
   }
 }

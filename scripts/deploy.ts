@@ -1,20 +1,50 @@
-import { ethers } from "hardhat";
-
+import { config, ethers, network } from "hardhat";
+import fs from "fs";
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+    // const addr = config.addresses;
+    const netinfo = await ethers.provider.getNetwork();
+    let network = netinfo.name;
+    if (network === "unknown") {
+        network = "mainnet";
+    }
 
-  const lockedAmount = ethers.utils.parseEther("0.001");
+    const chainId = netinfo.chainId;
+    console.log("============================================================");
+    console.log("");
+    console.log("Deployment Started ...");
+    console.log("Deploying on " + network + " (chainId: " + chainId + ") ...");
+    console.log("");
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+    // get the signers
+    const [owner] = await ethers.getSigners();
 
-  await lock.deployed();
+    const ownerAddress = await owner.getAddress();
+    console.log("");
+    console.log("Deploying from account: " + ownerAddress);
+    console.log("");
+    console.log("Deploying from contracts...");
 
-  console.log(
-    `Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+    const NFT = await ethers.getContractFactory('NFT');
+    let nft = await (await NFT.deploy("TEST-Luma", "$TEE-LUMA",ownerAddress)).deployed();
+
+    await writeAddress('NFT', nft.address, ["TEST-Luma", "$TEE-LUMA", ownerAddress], chainId);
+
+  console.log("Deployment Completed!");
 }
+
+let root: any = {};
+
+const writeAddress = async (factoryName: string, address: string, args: any[], chainId: number) => {
+  root[factoryName] = {}
+  root[factoryName][chainId] = {
+      address,
+      args
+  }
+
+  const json = JSON.stringify(root);
+  fs.writeFileSync('verify_addresses.json', json);
+}
+
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
