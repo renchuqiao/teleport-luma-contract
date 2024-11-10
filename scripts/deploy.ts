@@ -25,9 +25,9 @@ async function main() {
     console.log("Deploying from contracts...");
 
     const NFT = await ethers.getContractFactory('NFT');
-    let nft = await (await NFT.deploy("TEST-Luma", "$TEE-LUMA",ownerAddress)).deployed();
+    let nft = await (await NFT.deploy("Teleport Events NFT", "account.link",ownerAddress)).deployed();
 
-    await writeAddress('NFT', nft.address, ["TEST-Luma", "$TEE-LUMA", ownerAddress], chainId);
+    await writeAddress('NFT', nft.address, ["Teleport Events NFT", "account.link", ownerAddress], chainId);
 
   console.log("Deployment Completed!");
   console.log("");
